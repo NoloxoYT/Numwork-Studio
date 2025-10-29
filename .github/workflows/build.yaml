@@ -30,7 +30,6 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
-          # Pas besoin de target dynamique ici, on gère plus bas
           
       - name: Install dependencies for Linux
         if: matrix.platform == 'ubuntu-22.04'
@@ -44,8 +43,9 @@ jobs:
           choco install nsis
 
       - name: Install app dependencies
-        run: npm install
-        working-directory: numwork-studio-app
+        run: |
+          cd numwork-studio-app
+          npm install
 
       # --- Build for Windows (avec target GNU)
       - name: Build Tauri app (Windows)
@@ -53,10 +53,10 @@ jobs:
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_PATH: numwork-studio-app
         with:
           command: cargo tauri build
           args: '--target x86_64-pc-windows-gnu'
-        working-directory: numwork-studio-app
 
       # --- Build for Linux & macOS
       - name: Build Tauri app (Linux/macOS)
@@ -64,6 +64,6 @@ jobs:
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_PATH: numwork-studio-app
         with:
           command: cargo tauri build
-        working-directory: numwork-studio-app
