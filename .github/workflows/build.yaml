@@ -16,41 +16,54 @@ jobs:
         platform: [macos-latest, ubuntu-22.04, windows-latest]
 
     runs-on: ${{ matrix.platform }}
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: setup node
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: install Rust stable
+      - name: Install Rust (stable)
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
-          target: ${{ matrix.platform == 'windows-latest' && 'x86_64-pc-windows-gnu' || '' }} # Use GNU for Windows cross-compilation
-
-      - name: install webkit2gtk (Linux)
+          # Pas besoin de target dynamique ici, on gère plus bas
+          
+      - name: Install dependencies for Linux
         if: matrix.platform == 'ubuntu-22.04'
         run: |
           sudo apt update
           sudo apt install -y libwebkit2gtk-4.1-dev librsvg2-dev
 
-      - name: install NSIS (Windows)
+      - name: Install NSIS for Windows
         if: matrix.platform == 'windows-latest'
         run: |
           choco install nsis
 
-      - name: install app dependencies
+      - name: Install app dependencies
         run: npm install
         working-directory: numwork-studio-app
 
-      - name: build app
+      # --- Build for Windows (avec target GNU)
+      - name: Build Tauri app (Windows)
+        if: matrix.platform == 'windows-latest'
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           command: cargo tauri build
-          args: ${{ matrix.platform == 'windows-latest' && '--target x86_64-pc-windows-gnu' || '' }}
-          # For Windows, we explicitly specify the GNU target for cross-compilation from Linux/macOS
+          args: '--target x86_64-pc-windows-gnu'
+        working-directory: numwork-studio-app
+
+      # --- Build for Linux & macOS
+      - name: Build Tauri app (Linux/macOS)
+        if: matrix.platform != 'windows-latest'
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          command: cargo tauri build
         working-directory: numwork-studio-app
