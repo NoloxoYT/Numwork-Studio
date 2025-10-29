@@ -1,0 +1,103 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* Prevent scrollbars on the main container */
+}
+
+.file-explorer {
+  width: 250px; /* Fixed width for file explorer */
+  background-color: #282c34;
+  color: #abb2bf;
+  padding: 10px;
+  overflow-y: auto; /* Scroll for file list */
+  border-right: 1px solid #3a3f4b;
+  box-sizing: border-box;
+}
+
+.file-explorer .path-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #3a3f4b;
+}
+
+.file-explorer .path-bar button {
+  background-color: #61afef;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.file-explorer .path-bar button:disabled {
+  background-color: #545862;
+  cursor: not-allowed;
+}
+
+.file-explorer .path-bar span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-grow: 1;
+}
+
+.file-explorer .entries {
+  flex-grow: 1;
+}
+
+.file-explorer .file-entry {
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.file-explorer .file-entry:hover {
+  background-color: #3a3f4b;
+}
+
+.file-explorer .directory {
+  font-weight: bold;
+}
+
+.editor-panel {
+  flex-grow: 1; /* Take remaining width */
+  display: flex;
+  flex-direction: column;
+}
+
+.file-path-display {
+  background-color: #1e1e1e;
+  color: #cccccc;
+  padding: 10px;
+  font-family: monospace;
+  font-size: 14px;
+  border-bottom: 1px solid #3a3f4b;
+}
+
+.error-message {
+  background-color: #ff4d4d;
+  color: white;
+  padding: 10px;
+  font-family: monospace;
+  font-size: 14px;
+}
