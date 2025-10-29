@@ -43,6 +43,7 @@ jobs:
 
       - name: install app dependencies
         run: npm install
+        working-directory: numwork-studio-app
 
       - name: build app
         uses: tauri-apps/tauri-action@v0
@@ -52,3 +53,4 @@ jobs:
           command: cargo tauri build
           args: ${{ matrix.platform == 'windows-latest' && '--target x86_64-pc-windows-gnu' || '' }}
           # For Windows, we explicitly specify the GNU target for cross-compilation from Linux/macOS
+        working-directory: numwork-studio-app
